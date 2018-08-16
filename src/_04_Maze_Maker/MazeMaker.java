@@ -20,7 +20,12 @@ public class MazeMaker {
 		int yposition = randGen.nextInt(h);
 		// 5. call selectNextPath method with the randomly selected cell
 		selectNextPath(maze.getCell(xposition, yposition));
+		int randx = randGen.nextInt(width);
+		int randy = randGen.nextInt(height);
+		maze.getCell(randx, 0).setNorthWall(false);
+		maze.getCell(randx, height-1).setSouthWall(false);
 		return maze;
+		
 	}
 
 	// 6. Complete the selectNextPathMethod
@@ -42,6 +47,7 @@ public class MazeMaker {
 			currentCell = randneighbor;
 			currentCell.setBeenVisited(true);
 			selectNextPath(currentCell);
+
 		}
 		// D. if all neighbors are visited
 		else {
@@ -53,6 +59,9 @@ public class MazeMaker {
 				// recall method
 				selectNextPath(currentCell);
 			}
+			
+				
+			
 		}
 
 	}
@@ -86,6 +95,7 @@ public class MazeMaker {
 				c2.setWestWall(false);
 			}
 		}
+
 	}
 
 	// 8. Complete the getUnvisitedNeighbors method
