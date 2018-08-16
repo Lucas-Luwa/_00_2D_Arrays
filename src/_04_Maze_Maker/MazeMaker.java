@@ -19,39 +19,42 @@ public class MazeMaker {
 		int xposition = randGen.nextInt(w);
 		int yposition = randGen.nextInt(h);
 		// 5. call selectNextPath method with the randomly selected cell
-		selectNextPath(maze.manycells[xposition][yposition]);
+		selectNextPath(maze.getCell(xposition, yposition));
 		return maze;
 	}
 
 	// 6. Complete the selectNextPathMethod
 	private static void selectNextPath(Cell currentCell) {
 		// A. mark cell as visited
-		currentCell.hasBeenVisited();
+		currentCell.setBeenVisited(true);
 		// B. check for unvisited neighbors using the cell
-		int numofneighbors = getUnvisitedNeighbors(currentCell).size();
+		ArrayList<Cell> getneighbors = getUnvisitedNeighbors(currentCell);
 		// C. if has unvisited neighbors,
-		if (numofneighbors > 0) {
+		if (getneighbors.size() > 0) {
 			// C1. select one at random.
-			int xposition = randGen.nextInt(width);
-			int yposition = randGen.nextInt(height);
+			int randomcell = randGen.nextInt(getneighbors.size());
+			Cell randneighbor = getneighbors.get(randomcell);
 			// C2. push it to the stack
-			uncheckedCells.push(maze.manycells[xposition][yposition]);
+			uncheckedCells.push(randneighbor);
 			// C3. remove the wall between the two cells
-			removeWalls(currentCell, maze.manycells[xposition][yposition]);
+			removeWalls(currentCell, randneighbor);
 			// C4. make the new cell the current cell and mark it as visited
-			maze.manycells[xposition][yposition] = currentCell;
-			maze.manycells[xposition][yposition].hasBeenVisited();
+			currentCell = randneighbor;
+			currentCell.setBeenVisited(true);
+			selectNextPath(currentCell);
 		}
 		// D. if all neighbors are visited
-		if (numofneighbors == 0) {
+		else {
 			// D1. if the stack is not empty
 			if (uncheckedCells.isEmpty() == false) {
 				// D1a. pop a cell from the stack
-				Cell stackcell = uncheckedCells.pop();
+				currentCell = uncheckedCells.pop();
 				// D1b. make that the current cell
-				currentCell = stackcell;
+				// recall method
+				selectNextPath(currentCell);
 			}
 		}
+
 	}
 
 	// 7. Complete the remove walls method.
@@ -62,40 +65,26 @@ public class MazeMaker {
 		int yp1 = c1.getY();
 		int xp2 = c2.getX();
 		int yp2 = c2.getY();
-
 		if (xp1 == xp2) {
 			// north and south wall
-			if (yp2 - 4 > 0) {
-				if (yp1 == yp2 - 4) {
-					c1.setNorthWall(false);
-					c2.setSouthWall(false);
-				}
-			}
-			if (yp2 + 4 < height) {
-				if (yp1 == yp2 + 4) {
-					c2.setNorthWall(false);
-					c1.setSouthWall(false);
-				}
+			if (yp1 > yp2) {
+				c1.setNorthWall(false);
+				c2.setSouthWall(false);
+			} else {
+				c2.setNorthWall(false);
+				c1.setSouthWall(false);
 			}
 		}
 		if (yp1 == yp2) {
-			if (xp2 - 4 > 0) {
-				if (xp1 == xp2 - 4) {
-					// west wall
-					c2.setEastWall(false);
-					c1.setWestWall(false);
-
-				}
+			if (xp1 > xp2) {
+				// west wall
+				c2.setEastWall(false);
+				c1.setWestWall(false);
+			} else {
+				// east wall
+				c1.setEastWall(false);
+				c2.setWestWall(false);
 			}
-			if (xp2 + 4 < width) {
-				if (xp1 == xp2 + 4) {
-					// east wall
-					c1.setEastWall(false);
-					c2.setWestWall(false);
-				}
-			}
-		} else {
-
 		}
 	}
 
@@ -106,31 +95,30 @@ public class MazeMaker {
 		ArrayList<Cell> bunchofcells = new ArrayList<Cell>();
 		int xp1 = c.getX();
 		int yp1 = c.getY();
-		if (yp1 - 4 > 0) {
-			if (maze.manycells[xp1][yp1 - 4].hasBeenVisited() == false) {
-				// up
-				bunchofcells.add(maze.manycells[xp1][yp1 - 4]);
-			}
-		}
-		if (yp1 + 4 < height) {
-			if (maze.manycells[xp1][yp1 + 4].hasBeenVisited() == false) {
+		if (yp1 + 1 < height) {
+			if (maze.getCell(xp1, yp1 + 1).hasBeenVisited() == false) {
 				// down
-				bunchofcells.add(maze.manycells[xp1][yp1 + 4]);
+				bunchofcells.add(maze.getCell(xp1, yp1 + 1));
 			}
 		}
-		if (xp1 - 4 > 0) {
-			if (maze.manycells[xp1 - 4][yp1].hasBeenVisited() == false) {
-				// left
-				bunchofcells.add(maze.manycells[xp1 - 4][yp1]);
+		if (yp1 - 1 >= 0) {
+			if (maze.getCell(xp1, yp1 - 1).hasBeenVisited() == false) {
+				// up
+				bunchofcells.add(maze.getCell(xp1, yp1 - 1));
 			}
 		}
-		if (xp1 + 4 < width) {
-			if (maze.manycells[xp1 + 4][yp1].hasBeenVisited() == false) {
+		if (xp1 + 1 < width) {
+			if (maze.getCell(xp1 + 1, yp1).hasBeenVisited() == false) {
 				// right
-				bunchofcells.add(maze.manycells[xp1 + 4][yp1]);
+				bunchofcells.add(maze.getCell(xp1 + 1, yp1));
+			}
+		}
+		if (xp1 - 1 >= 0) {
+			if (maze.getCell(xp1 - 1, yp1).hasBeenVisited() == false) {
+				// left
+				bunchofcells.add(maze.getCell(xp1 - 1, yp1));
 			}
 		} else {
-
 		}
 		return bunchofcells;
 	}

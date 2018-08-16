@@ -6,14 +6,10 @@ import java.awt.Graphics;
 public class Cell {
 	public static final int X_MARGIN = 100;
 	public static final int Y_MARGIN = 100;
-
 	private int x;
 	private int y;
-
 	private int size = 100;
-
 	private boolean visited;
-
 	private boolean northWall;
 	private boolean southWall;
 	private boolean eastWall;

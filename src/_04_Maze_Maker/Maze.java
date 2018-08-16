@@ -4,14 +4,13 @@ import java.awt.Graphics;
 
 public class Maze {
 	// 1. Create a 2D array of cells. Don't initialize it.
-	Cell[][] manycells;
+	private Cell[][] manycells;
 	private int width;
 	private int height;
 
 	public Maze(int w, int h) {
 		this.width = w;
 		this.height = h;
-
 		// 2. Initialize the cells using the width and height variables
 		manycells = new Cell[w][h];
 		// 3. Iterated through each cell and initialize it
