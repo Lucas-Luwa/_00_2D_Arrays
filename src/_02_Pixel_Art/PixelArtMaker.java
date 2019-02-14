@@ -23,7 +23,7 @@ public class PixelArtMaker implements MouseListener, ActionListener {
 	private GridPanel gp;
 	private JButton save;
 	ColorSelectionPanel csp;
-	private static final String DATA_FILE = "src/_04_Serialization/SaveData";
+	private static final String DATA_FILE = "src/_05_Pixel_Art_Save_State/test3";
 	public void start() {
 		gip = new GridInputPanel(this);
 		window = new JFrame("Pixel Art");
