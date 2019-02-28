@@ -11,26 +11,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+//import _04_Serialization.SaveData;
 
-import _04_Serialization.SaveData;
 
-public class PixelArtMaker implements MouseListener, ActionListener {
+public class PixelArtMaker implements MouseListener, ActionListener, Serializable {
 	private JFrame window;
 	private GridInputPanel gip;
 	private GridPanel gp;
 	private JButton save;
 	ColorSelectionPanel csp;
-	private static final String DATA_FILE = "src/_05_Pixel_Art_Save_State/test3";
+	private static final String DATA_FILE = "src/_02_Pixel_Art/SaveData";
+
 	public void start() {
 		gip = new GridInputPanel(this);
 		window = new JFrame("Pixel Art");
 		save = new JButton();
 		window.setLayout(new FlowLayout());
 		window.setResizable(false);
-
+		
 		window.add(gip);
 		window.add(save);
 		save.setVisible(false);
@@ -84,11 +86,11 @@ public class PixelArtMaker implements MouseListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.equals(save)) {
-			
+		if (e.getSource().equals(save)) {
+			save(GridPanel.);
 		}
 	}
-	private static void save(SaveData data) {
+	private static void save(GridPanel data) {
 		try (FileOutputStream fos = new FileOutputStream(new File(DATA_FILE));
 				ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 			oos.writeObject(data);
@@ -97,10 +99,10 @@ public class PixelArtMaker implements MouseListener, ActionListener {
 		}
 	}
 
-	private static SaveData load() {
+	private static GridPanel load() {
 		try (FileInputStream fis = new FileInputStream(new File(DATA_FILE));
 				ObjectInputStream ois = new ObjectInputStream(fis)) {
-			return (SaveData) ois.readObject();
+			return (GridPanel) ois.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -111,4 +113,5 @@ public class PixelArtMaker implements MouseListener, ActionListener {
 			return null;
 		}
 	}
+
 }
