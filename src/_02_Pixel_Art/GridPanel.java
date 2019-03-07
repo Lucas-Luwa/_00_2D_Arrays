@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import javax.swing.JPanel;
 
-public class GridPanel extends JPanel implements Serializable{
+public class GridPanel extends JPanel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int windowWidth;

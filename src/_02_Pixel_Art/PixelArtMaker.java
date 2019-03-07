@@ -17,12 +17,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 //import _04_Serialization.SaveData;
 
-
-public class PixelArtMaker implements MouseListener, ActionListener, Serializable {
+public class PixelArtMaker implements MouseListener, ActionListener {
 	private JFrame window;
 	private GridInputPanel gip;
 	private GridPanel gp;
 	private JButton save;
+	private JButton load;
+	private Boolean truth = true;
 	ColorSelectionPanel csp;
 	private static final String DATA_FILE = "src/_02_Pixel_Art/SaveData";
 
@@ -30,13 +31,16 @@ public class PixelArtMaker implements MouseListener, ActionListener, Serializabl
 		gip = new GridInputPanel(this);
 		window = new JFrame("Pixel Art");
 		save = new JButton();
+		load = new JButton();
 		window.setLayout(new FlowLayout());
 		window.setResizable(false);
-		
 		window.add(gip);
 		window.add(save);
+		window.add(load);
 		save.setVisible(false);
+		load.setVisible(false);
 		save.setText("Save");
+		load.setText("Load");
 		window.pack();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -49,10 +53,12 @@ public class PixelArtMaker implements MouseListener, ActionListener, Serializabl
 		window.add(gp);
 		window.add(csp);
 		save.setVisible(true);
+		load.setVisible(true);
 		gp.repaint();
 		gp.addMouseListener(this);
 		save.addActionListener(this);
 		window.pack();
+		load.addActionListener(this);
 	}
 
 	public static void main(String[] args) {
@@ -87,9 +93,15 @@ public class PixelArtMaker implements MouseListener, ActionListener, Serializabl
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource().equals(save)) {
-			save(GridPanel.);
+			save(gp);
+		}
+		if (e.getSource().equals(load)) {
+			gp = load();
+			window.add(gp);
+			gp.repaint();
 		}
 	}
+
 	private static void save(GridPanel data) {
 		try (FileOutputStream fos = new FileOutputStream(new File(DATA_FILE));
 				ObjectOutputStream oos = new ObjectOutputStream(fos)) {
